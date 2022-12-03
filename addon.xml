@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<addon id="script.module.kover" name="Simple Kodi Version Proxy Module" version="0.0.1" provider-name="libka team">
+	<requires>
+		<import addon="xbmc.python" version="3.0.0" />
+	</requires>
+	<extension point="xbmc.python.module" library="lib" />
+	<extension point="xbmc.addon.metadata">
+		<summary lang="en_GB">Helper framework for keep Kodi Version API avaliable (K19, K20)</summary>
+		<summary lang="pl_PL">Biblioteka dla utrzymania SPI różnych wersji Kodi (K19, K20)</summary>
+		<platform>all</platform>
+		<license>MIT</license>
+		<source>https://github.com/libka-pl/script.module.kover</source>
+		<assets>
+			<icon>resources/icon.png</icon>
+		</assets>
+		<news>v0.0.1
+– initial commit</news>
+	</extension>
+</addon>
