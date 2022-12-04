@@ -3,7 +3,7 @@ Kodi wrappers for K20 with K19 API.
 """
 
 from typing import Union, Any, Tuple, List, Dict, Callable
-from ptw.libraries.wrapt.wrappers import ObjectProxy
+from wrapt.wrappers import ObjectProxy
 
 import xbmcgui
 from xbmcgui import ListItem as xbmcgui_ListItem
@@ -578,7 +578,7 @@ def _patch():
     """
     Monkey patching.
     """
-    xbmcgui.ListItem = xbmcgui_ListItem
+    xbmcgui.ListItem = ListItem
 
 
-__all__ = ('ListItem', )
+__all__ = ('_patch', 'ListItem')

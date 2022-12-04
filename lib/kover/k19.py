@@ -6,13 +6,14 @@ from typing import Union, Any, Callable, List, Dict
 from collections import Sequence
 from dataclasses import dataclass, asdict
 
-from ptw.libraries.wrapt.wrappers import ObjectProxy
+from wrapt.wrappers import ObjectProxy
 
 import xbmc
 import xbmcgui
 
 from xbmc import InfoTagVideo as xbmc_InfoTagVideo
 from xbmc import InfoTagMusic as xbmc_InfoTagMusic
+from xbmcgui import ListItem as xbmcgui_ListItem
 
 
 def kodi_list(val: Union[Any, List[Any]]) -> List[Any]:
@@ -419,7 +420,7 @@ class InfoTagMusicWrapper(InfoTagWrapper):
             self._self_list_item.setInfo({'discnumber': disc})
 
 
-class ListItem(xbmcgui.ListItem):
+class ListItem(xbmcgui_ListItem):
     """
     xbmcgui.ListItem with K20 API.
     """
@@ -452,12 +453,7 @@ def _patch():
     xbmc.VideoStreamDetail = VideoStreamDetail
     xbmc.AudioStreamDetail = AudioStreamDetail
     xbmc.SubtitleStreamDetail = SubtitleStreamDetail
+    xbmcgui.ListItem = ListItem
 
 
-if __name__ == '__main__':
-    # tests
-    a1 = Actor('Zenon', 'Piotruś')
-    print(a1.name)
-    print(a1.getName())
-    print(a1.setName('Staszek'))
-    print(a1.getName())
+__all__ = ('_patch', 'Actor', 'ListItem', 'VideoStreamDetail', 'AudioStreamDetail', 'SubtitleStreamDetail')
