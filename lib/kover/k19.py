@@ -131,7 +131,7 @@ class InfoTagWrapper(ObjectProxy):
             def setter(value):
                 self._self_data[key] = value
                 if self._self_sync:
-                    self._self_list_item.setInfo({key: value})
+                    self._self_list_item.setInfo(self._type, {key: value})
             key = key[3:].lower()
             return setter
         raise AttributeError(key)
@@ -174,7 +174,7 @@ class InfoTagWrapper(ObjectProxy):
         """
         self._self_data['dbid'] = dbId
         if self._self_sync:
-            self._self_list_item.setInfo({'dbid': dbId})
+            self._self_list_item.setInfo(self._type, {'dbid': dbId})
 
     def setMediaType(self, mediaType: str) -> None:
         """
@@ -187,7 +187,7 @@ class InfoTagWrapper(ObjectProxy):
         """
         self._self_data['mediatype'] = mediaType
         if self._self_sync:
-            self._self_list_item.setInfo({'mediatype': mediaType})
+            self._self_list_item.setInfo(self._type, {'mediatype': mediaType})
 
     def setDuration(self, duration: int) -> None:
         """
@@ -200,7 +200,7 @@ class InfoTagWrapper(ObjectProxy):
         """
         self._self_data['duration'] = duration
         if self._self_sync:
-            self._self_list_item.setInfo({'duration': duration})
+            self._self_list_item.setInfo(self._type, {'duration': duration})
 
     def setYear(self, year: int) -> None:
         """
@@ -213,13 +213,16 @@ class InfoTagWrapper(ObjectProxy):
         """
         self._self_data['year'] = year
         if self._self_sync:
-            self._self_list_item.setInfo({'year': year})
+            self._self_list_item.setInfo(self._type, {'year': year})
 
 
 class InfoTagVideoWrapper(InfoTagWrapper):
     """
     Access and / or modify the video metadata of a ListItem.
     """
+
+    #: InfoTag type, used in ListItem.setInfo().
+    _type: str = 'video'
 
     def getDirectors(self) -> List[str]:
         """
@@ -382,6 +385,9 @@ class InfoTagMusicWrapper(InfoTagWrapper):
     Access and / or modify the music metadata of a ListItem.
     """
 
+    #: InfoTag type, used in ListItem.setInfo().
+    _type: str = 'music'
+
     def setURL(self, url: str) -> None:
         """
         Set the URL of the music item.
@@ -404,7 +410,7 @@ class InfoTagMusicWrapper(InfoTagWrapper):
         """
         self._self_data['tracknumber'] = track
         if self._self_sync:
-            self._self_list_item.setInfo({'tracknumber': track})
+            self._self_list_item.setInfo(self._type, {'tracknumber': track})
 
     def setDisc(self, disc: int) -> None:
         """
@@ -417,7 +423,7 @@ class InfoTagMusicWrapper(InfoTagWrapper):
         """
         self._self_data['discnumber'] = disc
         if self._self_sync:
-            self._self_list_item.setInfo({'discnumber': disc})
+            self._self_list_item.setInfo(self._type, {'discnumber': disc})
 
 
 class ListItem(xbmcgui_ListItem):
