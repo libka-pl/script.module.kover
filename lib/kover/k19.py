@@ -449,11 +449,13 @@ def _patch():
     """
     Monkey patching.
     """
-    xbmc.Actor = Actor
-    xbmc.VideoStreamDetail = VideoStreamDetail
-    xbmc.AudioStreamDetail = AudioStreamDetail
-    xbmc.SubtitleStreamDetail = SubtitleStreamDetail
-    xbmcgui.ListItem = ListItem
+    if not getattr(xbmc, '_patched_by_kover'):
+        xbmc.Actor = Actor
+        xbmc.VideoStreamDetail = VideoStreamDetail
+        xbmc.AudioStreamDetail = AudioStreamDetail
+        xbmc.SubtitleStreamDetail = SubtitleStreamDetail
+        xbmcgui.ListItem = ListItem
+        xbmc._patched_by_kover = True
 
 
 __all__ = ('_patch', 'Actor', 'ListItem', 'VideoStreamDetail', 'AudioStreamDetail', 'SubtitleStreamDetail')

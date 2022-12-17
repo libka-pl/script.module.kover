@@ -5,6 +5,7 @@ Kodi wrappers for K20 with K19 API.
 from typing import Union, Any, Tuple, List, Dict, Callable
 from wrapt.wrappers import ObjectProxy
 
+import xbmc
 import xbmcgui
 from xbmcgui import ListItem as xbmcgui_ListItem
 from xbmc import VideoStreamDetail, AudioStreamDetail, SubtitleStreamDetail
@@ -578,7 +579,9 @@ def _patch():
     """
     Monkey patching.
     """
-    xbmcgui.ListItem = ListItem
+    if not getattr(xbmc, '_patched_by_kover'):
+        xbmcgui.ListItem = ListItem
+        xbmc._patched_by_kover = True
 
 
 __all__ = ('_patch', 'ListItem')

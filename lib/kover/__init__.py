@@ -3,15 +3,15 @@
 
 
 from collections import namedtuple
-from typing import Dict, List, Tuple
+from typing import Tuple
 
 import xbmc
 # traversal modules (ready to monkey-pathing)
-import xbmcvfs
-import xbmcaddon
-import xbmcdrm
-import xbmcgui
-import xbmcplugin
+import xbmcvfs      # noqa: F401
+import xbmcaddon    # noqa: F401
+import xbmcdrm      # noqa: F401
+import xbmcgui      # noqa: F401
+import xbmcplugin   # noqa: F401
 
 
 #: Kodi Version tuple type.
