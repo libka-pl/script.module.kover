@@ -449,7 +449,7 @@ def _patch():
     """
     Monkey patching.
     """
-    if not getattr(xbmc, '_patched_by_kover'):
+    if not getattr(xbmc, '_patched_by_kover', None):
         xbmc.Actor = Actor
         xbmc.VideoStreamDetail = VideoStreamDetail
         xbmc.AudioStreamDetail = AudioStreamDetail

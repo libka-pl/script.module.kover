@@ -579,7 +579,7 @@ def _patch():
     """
     Monkey patching.
     """
-    if not getattr(xbmc, '_patched_by_kover'):
+    if not getattr(xbmc, '_patched_by_kover', None):
         xbmcgui.ListItem = ListItem
         xbmc._patched_by_kover = True
 
