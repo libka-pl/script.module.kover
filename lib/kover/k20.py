@@ -215,7 +215,7 @@ info_label_keys: Dict[str, List[Union[str, Callable]]] = {
     'director': [one_or_more, 'setDirectors'],
     'duration': [int_or_none, 'setDuration'],
     'episodeguide': ['setEpisodeGuide'],
-    'episode': [int_or_none, 'setEpisodeGuide'],
+    'episode': [int_or_none, 'setEpisode'],
     'genre': [one_or_more, 'setGenres'],
     'imdbnumber': [set_imdb_number],
     'lastplaye': ['setLastPlayed'],
