@@ -2,7 +2,7 @@
 Kodi wrappers for K19 with K20 API.
 """
 
-from typing import Union, Any, Callable, List, Dict
+from typing import Union, Any, Callable, Tuple, List, Dict
 from collections import Sequence
 from dataclasses import dataclass, asdict
 
@@ -350,7 +350,7 @@ class InfoTagVideoWrapper(InfoTagWrapper):
         Parameters
         ----------
         stream : VideoStreamDetail
-            Video stream
+            Video stream.
         """
         if self._self_list_item is not None:
             return self._self_list_item.addStreamInfo('video', asdict(stream))
@@ -362,7 +362,7 @@ class InfoTagVideoWrapper(InfoTagWrapper):
         Parameters
         ----------
         stream : AudioStreamDetail
-            Audio stream
+            Audio stream.
         """
         if self._self_list_item is not None:
             return self._self_list_item.addStreamInfo('audio', asdict(stream))
@@ -374,10 +374,53 @@ class InfoTagVideoWrapper(InfoTagWrapper):
         Parameters
         ----------
         stream : SubtitleStreamDetail
-            Subtitle stream
+            Subtitle stream.
         """
         if self._self_list_item is not None:
             return self._self_list_item.addStreamInfo('subtitle', asdict(stream))
+
+    def setCast(self, actors: List[Actor]) -> None:
+        """
+        Set the cast / actors of the video item.
+
+        Parameters
+        ----------
+        actors : list of Actor
+            List of cast / actors
+        """
+        self._self_list_item.setCast([{
+            'name':      actor.name,
+            'role':      actor.role,
+            'thumbnail': actor.thumbnail,
+            'order':     actor.order,
+        } for actor in actors])
+
+    def setResumePoint(self, time: float, totalTime: float = 0.0) -> None:
+        """
+        Set the resume point of the video item.
+
+        Parameters
+        ----------
+        time : float
+            Resume point in seconds.
+        totalTime : float
+            Total duration in seconds.
+        """
+        self._self_list_item.setProperty('ResumeTime', time)
+        if totalTime:
+            self._self_list_item.setProperty('TotalTime', totalTime)
+
+    def addSeasons(self, namedSeasons: List[Tuple[int, str]]) -> None:
+        """
+        Add named seasons to the TV show.
+
+        Parameters
+        ----------
+        namedSeasons : list of tuple of int, str
+            The seasons list: [ (season, name) ].
+        """
+        for number, name in namedSeasons or ():
+            self._self_list_item.addSeason(number, name)
 
 
 class InfoTagMusicWrapper(InfoTagWrapper):
