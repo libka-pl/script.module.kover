@@ -25,8 +25,6 @@ Next use The Kodi API as ususal.
 
 The `kover` module is avaliable in the `libka` repository – https://zip.libka.pl/pool/20/repository.libka/repository.libka-0.9.zip
 
-The last version can be found at the location – https://zip.libka.pl/pool/20/script.module.kover/
-
 
 ## To-do list
 
