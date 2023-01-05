@@ -23,7 +23,7 @@ Next use The Kodi API as ususal.
 
 ## Repo
 
-The `kover` module is avaliable in the `libka` repository – https://zip.libka.pl/pool/20/repository.libka/repository.libka-0.9.zip
+The `kover` module is avaliable in the `libka` repository – https://repo.libka.pl/repository.libka.zip
 
 
 ## To-do list
