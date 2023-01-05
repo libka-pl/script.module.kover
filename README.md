@@ -13,7 +13,7 @@ Kover implements K19 and K20 API at the same time.
 
 ## Usage
 
-Just import auto installer to patch all `xbmc*` modules.
+Just import auto installer to patch all `xbmc*` modules. Put it on top of your main plugin script.
 ```python
 from kover import autoinstall  # noqa: F401
 ```
