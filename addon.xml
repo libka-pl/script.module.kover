@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.module.kover" name="Simple Kodi Version Proxy Module" version="0.0.6" provider-name="libka team">
+<addon id="script.module.kover" name="Simple Kodi Version Proxy Module" version="0.0.7" provider-name="libka team">
 	<requires>
 		<import addon="xbmc.python" version="3.0.0" />
 	</requires>

@@ -3,7 +3,7 @@ Kodi wrappers for K19 with K20 API.
 """
 
 from typing import Union, Any, Callable, Tuple, List, Dict
-from collections import Sequence
+from collections.abc import Sequence
 from dataclasses import dataclass, asdict
 
 from wrapt.wrappers import ObjectProxy
