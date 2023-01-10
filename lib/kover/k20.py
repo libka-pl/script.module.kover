@@ -2,7 +2,7 @@
 Kodi wrappers for K20 with K19 API.
 """
 
-from typing import Union, Any, Tuple, List, Dict, Callable
+from typing import Union, Any, Tuple, List, Dict, Callable, Type
 from wrapt.wrappers import ObjectProxy
 
 import xbmc
@@ -177,6 +177,15 @@ def one_or_more(tag: InfoTag, value: Union[Any, List[Any]]) -> List[Any]:
     # return [value] if isinstance(value, (str, Mapping)) or not isinstance(value, Sequence) else value
 
 
+def str_or_none(tag: InfoTag, value: str) -> str:
+    """Helper. Convert to string or return ''."""
+    if isinstance(value, str):
+        return value
+    if value is None or value is False:
+        return ''
+    return str(value)
+
+
 def int_or_none(tag: InfoTag, value: Union[int, str]) -> int:
     """Helper. Convert to integer or return -1."""
     if isinstance(value, int):
@@ -274,6 +283,19 @@ info_label_keys: Dict[str, List[Union[str, Callable]]] = {
     'publisher': ['setPublisher'],
 }
 
+#: Keys for `ListItem.addStreamInfo(type, values)`. Values should be callable.
+stream_info_keys: Dict[str, List[Union[str, Callable]]] = {
+    # Video Values:
+    'codec': str_or_none,
+    'aspect': float_or_none,
+    'width': int_or_none,
+    'height': int_or_none,
+    'duration': int_or_none,
+    # Audio Values:
+    'language': str_or_none,
+    'channels': int_or_none,
+}
+
 
 class ListItem(xbmcgui_ListItem):
     """
@@ -362,11 +384,11 @@ class ListItem(xbmcgui_ListItem):
         """
         vtag = super().getVideoInfoTag()
         if type == 'video':
-            vtag.addVideoStream(VideoStreamDetail(**values))
+            vtag.addVideoStream(VideoStreamDetail(**_convert_stream_info_params(values)))
         elif type == 'audio':
-            vtag.addAudioStream(AudioStreamDetail(**values))
+            vtag.addAudioStream(AudioStreamDetail(**_convert_stream_info_params(values)))
         elif type == 'subtitle':
-            vtag.addSubtitleStream(SubtitleStreamDetail(**values))
+            vtag.addSubtitleStream(SubtitleStreamDetail(**_convert_stream_info_params(values)))
         else:
             raise ValueError(f'ListItem.addStreamInfo type must be one of video, audio, subtitle, not {type!r}')
 
@@ -573,6 +595,31 @@ class ListItem(xbmcgui_ListItem):
             super().setProperties(vals)
         if resume_point:
             self._set_resume_point()
+
+
+def _convert_stream_info_params(kwargs: Dict[str, Any]):
+    """
+    Helper. Convert ListItem.addStreamInfo arguments to
+    VideoStreamDetail/AudioStreamDetail/SubtitleStreamDetail ones.
+    """
+    params: Dict[str, Any] = {}
+    for key, value in kwargs.items():
+        operations = info_label_keys.get(key.lower())
+        if operations is None:
+            params[key] = value
+        else:
+            for op in operations:
+                try:
+                    if isinstance(op, str):
+                        value = getattr(None, op)(value)
+                    else:
+                        value = op(None, value)
+                except Exception as exc:
+                    import sys
+                    print('Incorrect K20 VideoStreamDetail/AudioStreamDetail/SubtitleStreamDetail:'
+                          f' {key} → {op!r}: {exc!r}', file=sys.stderr, end='')
+                    raise
+    return params
 
 
 def _patch():
