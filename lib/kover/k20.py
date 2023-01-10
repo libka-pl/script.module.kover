@@ -284,16 +284,17 @@ info_label_keys: Dict[str, List[Union[str, Callable]]] = {
 }
 
 #: Keys for `ListItem.addStreamInfo(type, values)`. Values should be callable.
+#: Strings are not supported here, there is no InfoTag object.
 stream_info_keys: Dict[str, List[Union[str, Callable]]] = {
     # Video Values:
-    'codec': str_or_none,
-    'aspect': float_or_none,
-    'width': int_or_none,
-    'height': int_or_none,
-    'duration': int_or_none,
+    'codec': [str_or_none],
+    'aspect': [float_or_none],
+    'width': [int_or_none],
+    'height': [int_or_none],
+    'duration': [int_or_none],
     # Audio Values:
-    'language': str_or_none,
-    'channels': int_or_none,
+    'language': [str_or_none],
+    'channels': [int_or_none],
 }
 
 
@@ -604,7 +605,7 @@ def _convert_stream_info_params(kwargs: Dict[str, Any]):
     """
     params: Dict[str, Any] = {}
     for key, value in kwargs.items():
-        operations = info_label_keys.get(key.lower())
+        operations = stream_info_keys.get(key.lower())
         if operations is None:
             params[key] = value
         else:
