@@ -194,6 +194,9 @@ def int_or_none(tag: InfoTag, value: Union[int, str]) -> int:
         value = value.replace(',', '')
         if '.' in value:
             return int(float(value) + .5)
+        if ':' in value:
+            factors = (1, 60, 3600, 86400)
+            return sum(int(v)*f for v, f in zip(value.split(':')[::-1], factors))
     return int(value) if value else -1
 
 
