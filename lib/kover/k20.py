@@ -15,6 +15,14 @@ from xbmc import Actor
 
 InfoTag = Union[InfoTagVideo, InfoTagMusic, InfoTagPicture, InfoTagGame, InfoTagRadioRDS]
 
+#: Keys allowed in Actor dcit in setCast
+_allowed_actor_keys: Dict[str] = {
+    'name': str,
+    'role': str,
+    'order': int,
+    'thumbnail': str,
+}
+
 
 class InfoTagMusicWrapper(ObjectProxy):
     """
@@ -146,13 +154,22 @@ class InfoTagVideoWrapper(ObjectProxy):
         return lst[0] if lst else ''
 
 
-def set_cast(tag: InfoTag, actors: List[Union[Dict[str, Any], Tuple[str, str]]]) -> None:
+def set_cast(tag: InfoTag, actors: List[Union[Dict[str, Any], Tuple[str, str]], str]) -> None:
     """Helper. Set actors form 'Cast' info label."""
     if actors:
-        if isinstance(actors[0], dict):
-            tag.setCast([Actor(**a) for a in actors])
-        else:
-            tag.setCast([Actor(*a) for a in actors])
+        try:
+            if isinstance(actors[0], dict):
+                tag.setCast([Actor(**a) for a in actors])
+            elif isinstance(actors[0], str):
+                tag.setCast([Actor(a) for a in actors])
+            else:
+                tag.setCast([Actor(*a) for a in actors])
+        except TypeError:
+            # Incorrect format, try to fix
+            if isinstance(actors[0], dict):
+                tag.setCast([Actor(**{k: v for k, v in a.items() if k in _allowed_actor_keys}) for a in actors])
+            else:
+                tag.setCast([Actor(*a[:4]) for a in actors])
 
 
 def set_imdb_number(tag: InfoTag, imdb: str) -> None:
