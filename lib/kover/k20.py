@@ -3,6 +3,7 @@ Kodi wrappers for K20 with K19 API.
 """
 
 from typing import Union, Any, Tuple, List, Dict, Callable, Type
+import re
 from wrapt.wrappers import ObjectProxy
 
 import xbmc
@@ -16,12 +17,15 @@ from xbmc import Actor
 InfoTag = Union[InfoTagVideo, InfoTagMusic, InfoTagPicture, InfoTagGame, InfoTagRadioRDS]
 
 #: Keys allowed in Actor dcit in setCast
-_allowed_actor_keys: Dict[str] = {
+_allowed_actor_keys: Dict[str, Type] = {
     'name': str,
     'role': str,
     'order': int,
     'thumbnail': str,
 }
+
+
+_int_remove_rx: re.Pattern = re.compile(r'[,\s]')
 
 
 class InfoTagMusicWrapper(ObjectProxy):
@@ -203,7 +207,7 @@ def int_or_none(tag: InfoTag, value: Union[int, str]) -> int:
     if isinstance(value, int):
         return value
     if isinstance(value, str):
-        value = value.replace(',', '')
+        value = _int_remove_rx.sub('', value)
         if '.' in value:
             return int(float(value) + .5)
         if ':' in value:
