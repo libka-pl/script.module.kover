@@ -158,7 +158,7 @@ class InfoTagVideoWrapper(ObjectProxy):
         return lst[0] if lst else ''
 
 
-def set_cast(tag: InfoTag, actors: List[Union[Dict[str, Any], Tuple[str, str]], str]) -> None:
+def set_cast(tag: InfoTag, actors: List[Union[Dict[str, Any], Tuple[str, str], str]]) -> None:
     """Helper. Set actors form 'Cast' info label."""
     if actors:
         try:
