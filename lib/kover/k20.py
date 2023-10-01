@@ -349,7 +349,7 @@ class ListItem(xbmcgui_ListItem):
                             cache: str = '',
                             post: bool = False,
                             isgz: bool = False,
-                            season: str = '',
+                            season: Union[int, str] = -1,
                             ) -> None:
         """
         Add an image to available artworks (needed for video scrapers)
@@ -378,7 +378,7 @@ class ListItem(xbmcgui_ListItem):
                                                              referrer=referrer, cache=cache, post=post,
                                                              isgz=isgz, season=season)
 
-    def addSeason(self, number, name: str = '') -> None:
+    def addSeason(self, number: int, name: str = '') -> None:
         """
         Add a season with name to a listitem. It needs at least the season number
 
@@ -477,7 +477,7 @@ class ListItem(xbmcgui_ListItem):
 
     def getVotes(self, key: str) -> int:
         """
-        Returns a listitem rating as a float.
+        Returns a listitem rating as a int.
 
         Parameters
         ----------
@@ -489,7 +489,7 @@ class ListItem(xbmcgui_ListItem):
         int
             the listitem votes
         """
-        return super().getVideoInfoTag().getRating(key)
+        return super().getVideoInfoTag().getVotesAsInt(key)
 
     def setCast(self, actors: List[Dict[str, Any]]) -> None:
         """
@@ -559,12 +559,12 @@ class ListItem(xbmcgui_ListItem):
 
     def _set_resume_point(self) -> None:
         """Helper. Set resume point via K20 API with property values."""
-        if self._self_resume_time is not None:
-            if self._self_resume_total_time is None:
-                return super().getVideoInfoTag().setResumePoint(self._self_resume_total_time)
-            else:
-                return super().getVideoInfoTag().setResumePoint(self._self_resume_total_time,
-                                                                self._self_resume_total_time)
+        vtag = super().getVideoInfoTag()
+        if self._self_resume_time is None:
+            self._self_resume_time = vtag.getResumeTime()
+        if self._self_resume_total_time is None:
+            self._self_resume_total_time = vtag.getResumeTimeTotal()
+        vtag.setResumePoint(self._self_resume_time, self._self_resume_total_time)
 
     def setProperty(self, key: str, value: Any) -> None:
         """
